@@ -10,17 +10,17 @@ const DealsSection = () => {
         <section className="bg-white/70 backdrop-blur-lg rounded-xl overflow-hidden shadow">
             <div className="flex items-center justify-between px-5 py-3 bg-gradient-to-r from-pink to-purple text-white">
                 <h3 className="font-semibold">Clearance Sale — Up to 60% Off</h3>
-                <span className="text-sm cursor-pointer hover:underline">See All</span>
+                <span className="text-sm cursor-pointer">See All</span>
             </div>
 
-            <div className="flex gap-3 md:gap-4 p-4 md:p-5 overflow-x-auto no-scrollbar">
+            <div className="flex gap-4 p-5 overflow-x-auto no-scrollbar">
                 {deals.map((deal, index) => (
-                    <div key={index} className="min-w-[140px] md:min-w-[180px] bg-white rounded-lg shadow cursor-pointer hover:-translate-y-1 transition flex-shrink-0">
-                        <img loading="lazy" className="h-28 md:h-40 w-full object-cover rounded-t-lg" src={deal.img} alt={deal.title} />
-                        <div className="p-2 md:p-3">
-                            <p className="text-xs md:text-sm font-medium truncate">{deal.title}</p>
-                            <span className="text-purple font-bold block text-sm md:text-base">{deal.price}</span>
-                            <span className="text-[10px] md:text-xs line-through text-gray-400">{deal.oldPrice}</span>
+                    <div key={index} className="min-w-[180px] bg-white rounded-lg shadow cursor-pointer transition flex-shrink-0">
+                        <img loading="lazy" className="h-40 w-full object-cover rounded-t-lg" src={deal.img} alt={deal.title} />
+                        <div className="p-3">
+                            <p className="text-sm font-medium">{deal.title}</p>
+                            <span className="text-purple font-bold">Ksh {deal.price?.replace('Ksh ', '')}</span>
+                            <span className="text-xs line-through text-gray-400 ml-2">{deal.oldPrice}</span>
                         </div>
                     </div>
                 ))}

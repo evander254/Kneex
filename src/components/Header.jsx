@@ -105,10 +105,10 @@ const Header = ({ onMenuClick, onCartClick }) => {
                     KNEEX
                 </div>
 
-                <div className="flex-1 flex min-w-0 relative" ref={searchRef}>
+                <div className="flex-1 hidden md:flex">
                     <input
-                        className="w-full px-4 py-2 rounded-l-md outline-none min-w-0 border border-white bg-white/10 text-white placeholder-gray-400 focus:bg-white/20 transition"
-                        placeholder="Search products..."
+                        className="w-full px-4 py-2 rounded-l-md outline-none"
+                        placeholder="Search products, brands & categories"
                         value={query}
                         onChange={(e) => {
                             setQuery(e.target.value);
@@ -120,13 +120,13 @@ const Header = ({ onMenuClick, onCartClick }) => {
                         onClick={() => {
                             if (query) trackEvent('search', { searchQuery: query });
                         }}
-                        className="px-4 bg-gradient-to-r from-pink to-purple text-white rounded-r-md shrink-0">
+                        className="px-4 bg-gradient-to-r from-pink to-purple text-white rounded-r-md">
                         <i className="fas fa-search"></i>
                     </button>
 
                     {/* Search Results Dropdown */}
                     {showResults && (query.length > 0) && (
-                        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-md shadow-lg overflow-hidden z-50">
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-md shadow-lg overflow-hidden z-50 mx-4 md:mx-0">
                             {isSearching ? (
                                 <div className="p-4 text-center text-gray-500 text-sm">Searching...</div>
                             ) : results.length > 0 ? (

@@ -39,7 +39,7 @@ const Hero = () => {
     }, []);
 
     return (
-        <section className="hero-carousel relative rounded-xl overflow-hidden h-[320px] md:h-[420px] group">
+        <section className="hero-carousel relative rounded-xl overflow-hidden h-[320px] md:h-[420px] group bg-cover bg-center">
             {/* Background Images Layer */}
             {slides.map((slide, index) => (
                 <div
@@ -63,14 +63,14 @@ const Hero = () => {
                                 : 'opacity-0 translate-y-4 invisible'
                                 }`}
                         >
-                            <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+                            <h1 className="text-3xl md:text-4xl font-bold mb-4">
                                 {slide.title}
                             </h1>
-                            <p className="mb-6 text-lg text-gray-200">
+                            <p className="mb-6">
                                 {slide.text}
                             </p>
                             <div>
-                                <a href="#" className="inline-block px-8 py-3 bg-gradient-to-r from-pink to-purple rounded-md font-semibold hover:shadow-lg hover:scale-105 transition-transform duration-300">
+                                <a href="#" className="inline-block px-6 py-3 bg-gradient-to-r from-pink to-purple rounded-md font-semibold">
                                     {slide.btnText}
                                 </a>
                             </div>
@@ -79,7 +79,7 @@ const Hero = () => {
                 </div>
             </div>
 
-            {/* Navigation Buttons */}
+            {/* Navigation Buttons (kept for functionality, though not in user snippet they are implicitly allowed as it's a carousel) */}
             <button
                 onClick={prevSlide}
                 className="carousel-btn left absolute top-1/2 left-4 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-sm flex items-center justify-center text-white transition-all opacity-0 group-hover:opacity-100 z-20"

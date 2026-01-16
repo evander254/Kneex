@@ -57,27 +57,27 @@ const ProductGrid = () => {
                     <p className="text-gray-500">No products available.</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                     {products.map((product) => (
                         <div
                             key={product.id}
                             onClick={() => handleProductClick(product.id)}
-                            className="bg-white/70 backdrop-blur rounded-lg shadow hover:-translate-y-1 transition cursor-pointer group"
+                            className="bg-white/70 backdrop-blur rounded-lg shadow hover:-translate-y-1 transition cursor-pointer"
                         >
                             <img
                                 loading="lazy"
-                                className="h-32 md:h-44 w-full object-cover rounded-t-lg group-hover:opacity-90 transition"
+                                className="h-44 w-full object-cover rounded-t-lg"
                                 src={product.image_url || 'https://via.placeholder.com/300'}
                                 alt={product.name}
                             />
-                            <div className="p-2 md:p-4">
-                                <p className="text-xs md:text-sm font-medium truncate group-hover:text-pink transition">{product.name}</p>
-                                <span className="text-purple font-bold block text-sm md:text-base">
+                            <div className="p-4">
+                                <p className="text-sm font-medium">{product.name}</p>
+                                <span className="text-purple font-bold block">
                                     Ksh {product.price?.toLocaleString()}
                                 </span>
                                 <button
                                     onClick={(e) => handleAddToCart(e, product)}
-                                    className="mt-2 md:mt-3 w-full py-1.5 md:py-2 bg-gradient-to-r from-pink to-purple text-white rounded text-xs md:text-sm hover:opacity-90 transition active:scale-95"
+                                    className="mt-3 w-full py-2 bg-gradient-to-r from-pink to-purple text-white rounded hover:opacity-90 transition"
                                 >
                                     Add to Cart
                                 </button>
