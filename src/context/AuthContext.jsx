@@ -23,6 +23,11 @@ export const AuthProvider = ({ children }) => {
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
             setLoading(false);
+
+            // Cleanup URL hash if it contains access_token
+            if (session && window.location.hash && window.location.hash.includes('access_token')) {
+                window.history.replaceState(null, '', window.location.pathname);
+            }
         });
 
         return () => subscription.unsubscribe();

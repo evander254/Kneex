@@ -112,9 +112,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                 className="w-full py-3 bg-gradient-to-r from-pink to-purple text-white font-bold rounded-lg shadow-lg hover:opacity-90 transition transform active:scale-[0.98]"
                                 onClick={() => {
                                     onClose();
-                                    // Navigate to checkout if you have one, or just alert for now
-                                    // navigate('/checkout');
-                                    alert("Proceeding to checkout functionality not yet implemented!");
+                                    navigate('/checkout');
                                 }}
                             >
                                 Proceed to Checkout

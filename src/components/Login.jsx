@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -10,7 +11,13 @@ const Login = () => {
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState('')
     const navigate = useNavigate()
+    const { user } = useAuth() || {}
 
+    useEffect(() => {
+        if (user) {
+            navigate('/')
+        }
+    }, [user, navigate])
     const handleAuth = async (e) => {
         e.preventDefault()
         setLoading(true)
