@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { trackEvent } from '../utils/analytics';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { supabase } from '../supabaseClient';
@@ -36,6 +37,14 @@ const Header = ({ onMenuClick, onCartClick }) => {
                 return;
             }
             setIsSearching(true);
+            // Throttle search tracking? Or maybe just track on submit/explicit action? 
+            // Requirement says "Search submit", which implies an explicit action.
+            // However, this is instant search. Let's track when results are populated if we want "search"
+            // OR better, track when they ACTUALLY type something substantial or we could just leave it for now
+            // and track only if there was a "Submit" button but there isn't one that does a full page search.
+            // Let's assume we want to track what they typed if they stop typing for a bit?
+            // Actually requirement says "Search submit". This UI has a search button. Let's track that.
+
             try {
                 const { data, error } = await supabase
                     .from('products')
@@ -57,6 +66,7 @@ const Header = ({ onMenuClick, onCartClick }) => {
     }, [query]);
 
     const handleProductClick = (id) => {
+        trackEvent('product_click', { productId: id }); // Track click from search results
         navigate(`/product/${id}`);
         setShowResults(false);
         setQuery('');
@@ -106,7 +116,11 @@ const Header = ({ onMenuClick, onCartClick }) => {
                         }}
                         onFocus={() => setShowResults(true)}
                     />
-                    <button className="px-4 bg-gradient-to-r from-pink to-purple text-white rounded-r-md shrink-0">
+                    <button
+                        onClick={() => {
+                            if (query) trackEvent('search', { searchQuery: query });
+                        }}
+                        className="px-4 bg-gradient-to-r from-pink to-purple text-white rounded-r-md shrink-0">
                         <i className="fas fa-search"></i>
                     </button>
 

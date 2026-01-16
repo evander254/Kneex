@@ -27,9 +27,9 @@ const AdminDashboard = () => {
     const fetchStats = async () => {
         try {
             // Count Users
-            const { count: userCount, error: userError } = await supabase
-                .from('profiles')
-                .select('*', { count: 'exact', head: true })
+            // Count Users
+            const { data: userCount, error: userError } = await supabase
+                .rpc('get_user_count')
 
             if (userError) throw userError
 

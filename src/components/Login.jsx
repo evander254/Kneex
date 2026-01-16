@@ -11,13 +11,15 @@ const Login = () => {
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState('')
     const navigate = useNavigate()
+    const [searchParams] = useState(new URLSearchParams(window.location.search))
+    const redirectUrl = searchParams.get('redirect') || '/'
     const { user } = useAuth() || {}
 
     useEffect(() => {
         if (user) {
-            navigate('/')
+            navigate(redirectUrl)
         }
-    }, [user, navigate])
+    }, [user, navigate, redirectUrl])
     const handleAuth = async (e) => {
         e.preventDefault()
         setLoading(true)
@@ -38,7 +40,7 @@ const Login = () => {
                     password,
                 })
                 if (error) throw error
-                navigate('/')
+                // Navigation handled by useEffect
             }
         } catch (err) {
             console.error('Auth error:', err)

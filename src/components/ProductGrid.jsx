@@ -1,4 +1,5 @@
 import React from 'react';
+import { trackEvent } from '../utils/analytics';
 import { supabase } from '../supabaseClient';
 
 import { useNavigate } from 'react-router-dom';
@@ -34,6 +35,7 @@ const ProductGrid = () => {
     };
 
     const handleProductClick = (id) => {
+        trackEvent('product_click', { productId: id });
         navigate(`/product/${id}`);
     };
 

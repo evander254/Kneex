@@ -112,10 +112,14 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                 className="w-full py-3 bg-gradient-to-r from-pink to-purple text-white font-bold rounded-lg shadow-lg hover:opacity-90 transition transform active:scale-[0.98]"
                                 onClick={() => {
                                     onClose();
-                                    navigate('/checkout');
+                                    if (user) {
+                                        navigate('/checkout');
+                                    } else {
+                                        navigate('/login?redirect=/checkout');
+                                    }
                                 }}
                             >
-                                Proceed to Checkout
+                                {user ? 'Proceed to Checkout' : 'Login to Checkout'}
                             </button>
 
                             {!user && (

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+import { trackEvent } from '../utils/analytics';
 import { useAuth } from './AuthContext';
 
 const CartContext = createContext();
@@ -53,6 +54,9 @@ export const CartProvider = ({ children }) => {
     };
 
     const addToCart = async (product) => {
+        // Track add to cart event
+        trackEvent('add_to_cart', { productId: product.id });
+
         // Optimistic update
         setCartItems(prevItems => {
             const existingItem = prevItems.find(item => item.id === product.id);
@@ -98,6 +102,9 @@ export const CartProvider = ({ children }) => {
     };
 
     const removeFromCart = async (productId) => {
+        // Track remove from cart event
+        trackEvent('remove_from_cart', { productId });
+
         setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
         if (user) {
             try {

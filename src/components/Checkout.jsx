@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { trackEvent } from '../utils/analytics'
 import { useCart } from '../context/CartContext'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -10,6 +11,16 @@ const Checkout = () => {
     const [loading, setLoading] = useState(false)
     const [mpesaNumber, setMpesaNumber] = useState('')
     const [location, setLocation] = useState('')
+
+    useEffect(() => {
+        // Track checkout initiation when they land on this page
+        if (cartItems.length > 0) {
+            trackEvent('checkout', {
+                cartTotal,
+                itemCount: cartItems.length
+            });
+        }
+    }, [])
 
     const handleCheckout = async (e) => {
         e.preventDefault()
