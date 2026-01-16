@@ -16,12 +16,12 @@ const Footer = () => {
                 <div>
                     <h4 className="text-pink font-semibold mb-3">Contact</h4>
                     <p>Nairobi, Kenya</p>
-                    <p>+254 700 000 000</p>
+                    <p>+254 720 855110</p>
                 </div>
             </div>
 
             <div className="text-center text-sm text-gray-400 pb-4">
-                © 2026 KNEEX. All Rights Reserved.
+                © 2026 KNEEX. All Rights Reserved.|By Evander James
             </div>
         </footer>
     );

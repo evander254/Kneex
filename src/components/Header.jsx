@@ -2,20 +2,27 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { supabase } from '../supabaseClient';
+import { useAuth } from '../context/AuthContext';
 
 const Header = ({ onMenuClick, onCartClick }) => {
     const { cartCount } = useCart();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     const [showResults, setShowResults] = useState(false);
+    const [showUserDropdown, setShowUserDropdown] = useState(false);
     const searchRef = useRef(null);
+    const userMenuRef = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (searchRef.current && !searchRef.current.contains(event.target)) {
                 setShowResults(false);
+            }
+            if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+                setShowUserDropdown(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -53,6 +60,20 @@ const Header = ({ onMenuClick, onCartClick }) => {
         navigate(`/product/${id}`);
         setShowResults(false);
         setQuery('');
+    };
+
+    const handleUserIconClick = () => {
+        if (user) {
+            setShowUserDropdown(!showUserDropdown);
+        } else {
+            navigate('/login');
+        }
+    };
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        setShowUserDropdown(false);
+        navigate('/');
     };
 
     return (
@@ -122,7 +143,28 @@ const Header = ({ onMenuClick, onCartClick }) => {
                 </div>
 
                 <div className="flex gap-4 text-white items-center shrink-0">
-                    <i className="fas fa-user cursor-pointer hover:text-pink transition"></i>
+                    <div className="relative" ref={userMenuRef}>
+                        <i
+                            className="fas fa-user cursor-pointer hover:text-pink transition"
+                            onClick={handleUserIconClick}
+                        ></i>
+                        {showUserDropdown && user && (
+                            <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 text-greyDark">
+                                <div className="px-4 py-2 border-b border-gray-100">
+                                    <p className="text-xs text-gray-500">Signed in as</p>
+                                    <p className="text-sm font-bold truncate">{user.email}</p>
+                                </div>
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50"
+                                >
+                                    <i className="fas fa-sign-out-alt mr-2"></i>
+                                    Sign Out
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
                     <div
                         onClick={onCartClick}
                         className="relative cursor-pointer hover:text-pink transition"

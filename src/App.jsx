@@ -9,6 +9,7 @@ import Footer from './components/Footer'
 import AdminLogin from './components/Admin/Adminlogin'
 import AdminDashboard from './components/Admin/AdminDashboard'
 import ProductDetails from './components/ProductDetails'
+import Login from './components/Login'
 
 const DealsSection = lazy(() => import('./components/DealsSection'))
 const ProductGrid = lazy(() => import('./components/ProductGrid'))
@@ -81,6 +82,7 @@ function App() {
               <Footer />
             </div>
           } />
+          <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/inventory" element={<ProductList />} />
