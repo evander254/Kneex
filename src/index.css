@@ -1,0 +1,62 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  @apply bg-gray-100 text-greyDark;
+}
+
+/* Strip Section Styles */
+.strip-section {
+  @apply bg-white rounded-lg shadow-sm p-4 mb-6;
+}
+
+.strip-header {
+  @apply flex justify-between items-center mb-4 border-b border-gray-100 pb-2;
+}
+
+.strip-header h3 {
+  @apply text-lg font-semibold text-greyDark;
+}
+
+.strip-header span {
+  @apply text-sm text-pink font-medium cursor-pointer uppercase hover:text-purple transition-colors;
+}
+
+.strip-products {
+  @apply flex overflow-x-auto gap-4 pb-2 snap-x;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.strip-products::-webkit-scrollbar {
+  display: none;
+}
+
+.strip-section .product {
+  @apply min-w-[130px] md:min-w-[200px] flex-shrink-0 flex flex-col hover:shadow-md transition-shadow rounded-md overflow-hidden bg-white p-2 border border-gray-100 snap-start;
+}
+
+.strip-section .product img {
+  @apply w-full h-28 md:h-40 object-cover rounded-md mb-2;
+}
+
+.strip-section .product-body {
+  @apply flex flex-col;
+}
+
+.strip-section .product-body p {
+  @apply text-sm text-greyDark truncate mb-1;
+}
+
+.strip-section .product-body .price {
+  @apply text-base font-bold text-greyDark;
+}
+
+/* Hero Carousel Styles */
+.hero-carousel .carousel-btn {
+  @apply cursor-pointer;
+}
