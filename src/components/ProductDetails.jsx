@@ -132,22 +132,39 @@ const ProductDetails = () => {
                         </button>
 
                         <button
-                            onClick={() => {
-                                // Try native share first
-                                if (navigator.share) {
-                                    navigator.share({
-                                        title: product.name,
-                                        text: `Check out ${product.name} on Kneex!`,
-                                        url: window.location.href,
-                                    })
-                                        .catch((err) => {
-                                            console.log('Error sharing via native api', err);
-                                            // Fallback to menu if user cancelled or failed
-                                            // setShowShareMenu(!showShareMenu); // Optional: decide if we show menu on cancel. usually not needed if cancelled.
-                                        });
-                                } else {
-                                    // Fallback for desktop/unsupported
-                                    setShowShareMenu(!showShareMenu);
+                            onClick={async () => {
+                                const shareData = {
+                                    title: product.name,
+                                    text: `Check out ${product.name} - Only Ksh ${product.price?.toLocaleString()} on Kneex!`,
+                                    url: window.location.href,
+                                };
+
+                                try {
+                                    if (navigator.share) {
+                                        // Try to fetch image to share
+                                        try {
+                                            const imageToShare = selectedImage || product.image_url;
+                                            if (imageToShare) {
+                                                const response = await fetch(imageToShare);
+                                                const blob = await response.blob();
+                                                const file = new File([blob], `${product.name.replace(/\s+/g, '_')}.jpg`, { type: 'image/jpeg' });
+
+                                                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                                                    shareData.files = [file];
+                                                }
+                                            }
+                                        } catch (e) {
+                                            console.warn("Could not fetch image for sharing", e);
+                                        }
+
+                                        await navigator.share(shareData);
+                                    } else {
+                                        setShowShareMenu(!showShareMenu);
+                                    }
+                                } catch (err) {
+                                    console.log('Error sharing or cancelled', err);
+                                    // Ensure fallback shows if share failed (and not just cancelled)
+                                    // although 'AbortError' is standard for cancellation.
                                 }
                             }}
                             className="w-full py-3 border-2 border-purple text-purple rounded-xl font-bold text-lg hover:bg-purple hover:text-white transition-all duration-200 flex items-center justify-center gap-3"
@@ -160,7 +177,7 @@ const ProductDetails = () => {
                         {showShareMenu && (
                             <div className="grid grid-cols-4 gap-2 p-4 bg-gray-50 rounded-xl border border-gray-100 animate-fade-in">
                                 <a
-                                    href={`https://wa.me/?text=${encodeURIComponent(`Check out ${product.name} on Kneex! ${window.location.href}`)}`}
+                                    href={`https://wa.me/?text=${encodeURIComponent(`Check out ${product.name} - Only Ksh ${product.price?.toLocaleString()} on Kneex! ${window.location.href}`)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex flex-col items-center gap-1 text-green-500 hover:opacity-80 transition"
@@ -171,7 +188,7 @@ const ProductDetails = () => {
                                     <span className="text-xs font-medium text-gray-600">WhatsApp</span>
                                 </a>
                                 <a
-                                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
+                                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(`Check out ${product.name} - Ksh ${product.price?.toLocaleString()}`)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex flex-col items-center gap-1 text-blue-600 hover:opacity-80 transition"
@@ -182,7 +199,7 @@ const ProductDetails = () => {
                                     <span className="text-xs font-medium text-gray-600">Facebook</span>
                                 </a>
                                 <a
-                                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${product.name} on Kneex!`)}&url=${encodeURIComponent(window.location.href)}`}
+                                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out ${product.name} - Only Ksh ${product.price?.toLocaleString()} on Kneex!`)}&url=${encodeURIComponent(window.location.href)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex flex-col items-center gap-1 text-black hover:opacity-80 transition"

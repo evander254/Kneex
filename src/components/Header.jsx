@@ -78,6 +78,14 @@ const Header = ({ onMenuClick, onCartClick }) => {
         navigate('/');
     };
 
+    const handleSearchSubmit = (e) => {
+        if ((e.key === 'Enter' || e.type === 'click') && query.trim()) {
+            trackEvent('search', { searchQuery: query });
+            navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+            setShowResults(false);
+        }
+    };
+
     return (
         <header className="sticky top-0 z-50 backdrop-blur-md bg-greyDark/80 border-b border-white/10">
             <div className="max-w-7xl mx-auto px-2 md:px-4 py-3 md:py-4 flex items-center gap-1 md:gap-4 justify-between">
@@ -109,11 +117,10 @@ const Header = ({ onMenuClick, onCartClick }) => {
                             setShowResults(true);
                         }}
                         onFocus={() => setShowResults(true)}
+                        onKeyDown={handleSearchSubmit}
                     />
                     <button
-                        onClick={() => {
-                            if (query) trackEvent('search', { searchQuery: query });
-                        }}
+                        onClick={handleSearchSubmit}
                         className="px-2 py-1 md:px-4 md:py-2 bg-gradient-to-r from-pink to-purple text-white rounded-r-md border-y-2 border-r-2 border-transparent shrink-0"
                     >
                         <i className="fas fa-search text-xs md:text-base"></i>

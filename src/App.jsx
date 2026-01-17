@@ -17,6 +17,7 @@ import CookieConsent from './components/CookieConsent'
 const DealsSection = lazy(() => import('./components/DealsSection'))
 const ProductGrid = lazy(() => import('./components/ProductGrid'))
 const StripSection = lazy(() => import('./components/StripSection'))
+const SearchResults = lazy(() => import('./components/SearchResults'))
 
 // Admin Components
 import ProductList from './components/Admin/Inventory/ProductList'
@@ -80,6 +81,12 @@ function App() {
                 <StripSection />
                 <ProductGrid />
               </Suspense>
+            </PublicLayout>
+          } />
+
+          <Route path="/search" element={
+            <PublicLayout>
+              <SearchResults />
             </PublicLayout>
           } />
 
