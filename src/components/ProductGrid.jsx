@@ -41,6 +41,7 @@ const ProductGrid = () => {
 
     const handleAddToCart = (e, product) => {
         e.stopPropagation(); // Prevent navigating to details page
+        trackEvent('add_to_cart', { productId: product.id });
         addToCart(product);
     };
 

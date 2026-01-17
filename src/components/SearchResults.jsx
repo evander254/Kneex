@@ -52,6 +52,7 @@ const SearchResults = () => {
 
     const handleAddToCart = (e, product) => {
         e.stopPropagation();
+        trackEvent('add_to_cart', { productId: product.id });
         addToCart(product);
     };
 

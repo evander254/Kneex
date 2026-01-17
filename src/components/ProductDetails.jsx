@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useCart } from '../context/CartContext';
+import { trackEvent } from '../utils/analytics';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -124,7 +125,10 @@ const ProductDetails = () => {
 
                     <div className="mt-auto space-y-4">
                         <button
-                            onClick={() => addToCart(product)}
+                            onClick={() => {
+                                trackEvent('add_to_cart', { productId: product.id });
+                                addToCart(product);
+                            }}
                             className="w-full py-4 bg-gradient-to-r from-pink to-purple text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-3"
                         >
                             <i className="fas fa-shopping-cart"></i>
