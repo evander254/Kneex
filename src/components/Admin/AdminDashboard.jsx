@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../supabaseClient'
-import { useNavigate } from 'react-router-dom'
-import { Link } from 'react-router-dom'
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState({
@@ -10,28 +8,22 @@ const AdminDashboard = () => {
         orders: 0
     })
     const [loading, setLoading] = useState(true)
-    const navigate = useNavigate()
+
+    // Auth check is now handled by AdminLayout, but keeping a failsafe here or relying on Layout is fine.
+    // Layout does the check, so we can simplify.
 
     useEffect(() => {
-        const checkAuth = () => {
-            const token = localStorage.getItem('admin_token')
-            if (!token) {
-                navigate('/admin')
-            }
-        }
-
-        checkAuth()
         fetchStats()
-    }, [navigate])
+    }, [])
 
     const fetchStats = async () => {
         try {
-            // Count Users
-            // Count Users
+            // Count Users - assuming rpc get_user_count exists as per previous code
+            // fallbacks might be needed if RPC is missing, but adhering to existing logic
             const { data: userCount, error: userError } = await supabase
                 .rpc('get_user_count')
 
-            if (userError) throw userError
+            if (userError) console.error('Error fetching users:', userError)
 
             // Count Products
             const { count: productCount, error: productError } = await supabase
@@ -60,114 +52,69 @@ const AdminDashboard = () => {
         }
     }
 
-    const handleLogout = () => {
-        localStorage.removeItem('admin_token')
-        navigate('/admin')
-    }
-
     if (loading) {
         return (
-            <div className="min-h-screen bg-greyDark flex items-center justify-center">
-                <div className="text-xl font-semibold text-white animate-pulse">Loading Admin Portal...</div>
+            <div className="flex items-center justify-center h-64">
+                <div className="text-xl font-semibold text-greyDark animate-pulse">Loading Stats...</div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans text-greyDark">
-            {/* Top Navigation Bar - Matching Header.jsx Style */}
-            <nav className="sticky top-0 z-50 backdrop-blur-md bg-greyDark/90 border-b border-white/10 px-6 py-4 flex justify-between items-center shadow-lg">
-                <div className="text-2xl font-bold bg-gradient-to-r from-pink to-purple bg-clip-text text-transparent">
-                    KNEEX <span className="text-white text-sm font-light tracking-widest ml-1 opacity-80">ADMIN</span>
-                </div>
-                <div className="flex items-center gap-6">
-                    <span className="text-sm text-gray-300">Welcome, Admin</span>
-                    <button
-                        onClick={handleLogout}
-                        className="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-4 py-2 rounded-lg text-sm transition duration-200 flex items-center gap-2"
-                    >
-                        <i className="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-            </nav>
+        <div>
+            <div className="flex items-center justify-between mb-8">
+                <h1 className="text-3xl font-bold text-greyDark">Dashboard Overview</h1>
+                <p className="text-sm text-gray-500">Welcome back, Admin</p>
+            </div>
 
-            <main className="max-w-7xl mx-auto px-6 py-8">
-                {/* Stats Grid */}
-                <h2 className="text-2xl font-bold text-greyDark mb-6">Dashboard Overview</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    {/* Users Card */}
-                    <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-pink hover:shadow-xl transition-shadow duration-300">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium uppercase tracking-wider mb-2">Total Users</p>
-                                <h3 className="text-4xl font-extrabold text-greyDark">{stats.users}</h3>
-                            </div>
-                            <div className="p-4 bg-pink/10 rounded-full text-pink">
-                                <i className="fas fa-users text-2xl"></i>
-                            </div>
+            {/* Stats Grid - Requested Design */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {/* Users Card */}
+                <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-pink hover:shadow-xl transition-shadow duration-300">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-sm text-gray-500 font-medium uppercase tracking-wider mb-2">Total Users</p>
+                            <h3 className="text-4xl font-extrabold text-greyDark">{stats.users}</h3>
                         </div>
-                    </div>
-
-                    {/* Products Card */}
-                    <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-purple hover:shadow-xl transition-shadow duration-300">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium uppercase tracking-wider mb-2">Total Inventory</p>
-                                <h3 className="text-4xl font-extrabold text-greyDark">{stats.products}</h3>
-                            </div>
-                            <div className="p-4 bg-purple/10 rounded-full text-purple">
-                                <i className="fas fa-box-open text-2xl"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Orders Card */}
-                    <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-blue-500 hover:shadow-xl transition-shadow duration-300">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium uppercase tracking-wider mb-2">Total Orders</p>
-                                <h3 className="text-4xl font-extrabold text-greyDark">{stats.orders}</h3>
-                            </div>
-                            <div className="p-4 bg-blue-100 rounded-full text-blue-600">
-                                <i className="fas fa-shopping-bag text-2xl"></i>
-                            </div>
+                        <div className="p-4 bg-pink/10 rounded-full text-pink">
+                            <i className="fas fa-users text-2xl"></i>
                         </div>
                     </div>
                 </div>
 
-                {/* Quick Actions */}
-                <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-                    <h2 className="text-xl font-bold mb-6 text-greyDark flex items-center gap-2">
-                        <i className="fas fa-bolt text-purple"></i> Quick Actions
-                    </h2>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        <button className="flex flex-col items-center justify-center p-6 border border-gray-100 rounded-xl hover:bg-gray-50 hover:border-pink/30 hover:shadow-md transition duration-200 group">
-                            <div className="w-12 h-12 rounded-full bg-pink/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                <i className="fas fa-user-edit text-pink text-xl"></i>
-                            </div>
-                            <span className="font-semibold text-gray-700">Manage Users</span>
-                        </button>
-                        <Link to="/admin/inventory" className="flex flex-col items-center justify-center p-6 border border-gray-100 rounded-xl hover:bg-gray-50 hover:border-purple/30 hover:shadow-md transition duration-200 group">
-                            <div className="w-12 h-12 rounded-full bg-purple/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                <i className="fas fa-tags text-purple text-xl"></i>
-                            </div>
-                            <span className="font-semibold text-gray-700">Manage Inventory</span>
-                        </Link>
-                        <button className="flex flex-col items-center justify-center p-6 border border-gray-100 rounded-xl hover:bg-gray-50 hover:border-blue-500/30 hover:shadow-md transition duration-200 group">
-                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                <i className="fas fa-clipboard-list text-blue-600 text-xl"></i>
-                            </div>
-                            <span className="font-semibold text-gray-700">View Orders</span>
-                        </button>
-                        <button className="flex flex-col items-center justify-center p-6 border border-gray-100 rounded-xl hover:bg-gray-50 hover:border-gray-400/30 hover:shadow-md transition duration-200 group">
-                            <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                <i className="fas fa-cog text-gray-600 text-xl"></i>
-                            </div>
-                            <span className="font-semibold text-gray-700">Settings</span>
-                        </button>
+                {/* Products Card */}
+                <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-purple hover:shadow-xl transition-shadow duration-300">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-sm text-gray-500 font-medium uppercase tracking-wider mb-2">Total Inventory</p>
+                            <h3 className="text-4xl font-extrabold text-greyDark">{stats.products}</h3>
+                        </div>
+                        <div className="p-4 bg-purple/10 rounded-full text-purple">
+                            <i className="fas fa-box-open text-2xl"></i>
+                        </div>
                     </div>
                 </div>
-            </main>
+
+                {/* Orders Card (Matching Style) */}
+                <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-blue-500 hover:shadow-xl transition-shadow duration-300">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-sm text-gray-500 font-medium uppercase tracking-wider mb-2">Total Orders</p>
+                            <h3 className="text-4xl font-extrabold text-greyDark">{stats.orders}</h3>
+                        </div>
+                        <div className="p-4 bg-blue-100 rounded-full text-blue-600">
+                            <i className="fas fa-shopping-bag text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Quick Actions (Optional - can be kept or removed since they are in sidebar now) */}
+            {/* Keeping simpler version if needed, or removing as they are in sidebar.
+                User said "Every Item In the Quick Action should be in the collapsible sidebar".
+                So I will remove the redundant Quick Actions section from the main view to keep it clean,
+                or replace with "Recent Activity" later. For now, removing redundant actions.
+            */}
         </div>
     )
 }

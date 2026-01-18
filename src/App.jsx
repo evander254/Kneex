@@ -23,6 +23,7 @@ const SearchResults = lazy(() => import('./components/SearchResults'))
 import ProductList from './components/Admin/Inventory/ProductList'
 import AddProduct from './components/Admin/Inventory/AddProduct'
 import EditProduct from './components/Admin/Inventory/EditProduct'
+import AdminLayout from './components/Admin/AdminLayout'
 
 // Cart Drawer Import
 import CartDrawer from './components/CartDrawer'
@@ -108,18 +109,15 @@ function App() {
             </PublicLayout>
           } />
 
-          {/* Admin Routes - keeping them separate or as requested? 
-               The user said 'fix homepage css... to all pages'. 
-               Admin pages might break with this new layout if they have their own sidebar.
-               I will leave them using their own layout if they have one, or just wrap in a simple div.
-               Checking previous code: AdminLogin, AdminDashboard... 
-               I'll wrap them in a simple container for now to avoid breaking them with the Public Grid.
-           */}
+          {/* Admin Routes */}
           <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/inventory" element={<ProductList />} />
-          <Route path="/admin/inventory/add" element={<AddProduct />} />
-          <Route path="/admin/inventory/edit/:id" element={<EditProduct />} />
+
+          <Route element={<AdminLayout />}>
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/inventory" element={<ProductList />} />
+            <Route path="/admin/inventory/add" element={<AddProduct />} />
+            <Route path="/admin/inventory/edit/:id" element={<EditProduct />} />
+          </Route>
 
         </Routes>
       </CartProvider>

@@ -138,7 +138,7 @@ const AddProduct = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans text-greyDark">
+        <div className="font-sans text-greyDark">
             <div className="max-w-3xl mx-auto">
                 <div className="mb-8 flex items-center justify-between">
                     <div>
